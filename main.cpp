@@ -1,11 +1,20 @@
-#include "mainwindow.h"
+#include "class/mainwindow.h"
 
 #include <QApplication>
 #include <QLocale>
+#include <QSettings>
 #include <QTranslator>
+#include <QtSql>
 
 int main(int argc, char *argv[]) {
     QApplication a(argc, argv);
+
+    // 设置本地基础信息以及配置信息
+    QCoreApplication::setOrganizationName("Code Campus Terminal");
+    QCoreApplication::setApplicationName("CCT");
+    QSettings::setPath(QSettings::IniFormat, QSettings::UserScope, QCoreApplication::applicationDirPath());
+    QSettings::setDefaultFormat(QSettings::IniFormat);
+
 
     QTranslator translator;
     const QStringList uiLanguages = QLocale::system().uiLanguages();
