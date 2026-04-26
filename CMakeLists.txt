@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.19)
 project(CodeCampusTerminal LANGUAGES CXX)
 
-find_package(Qt6 6.5 REQUIRED COMPONENTS Core Widgets LinguistTools Sql)
+find_package(Qt6 6.5 REQUIRED COMPONENTS Core Widgets LinguistTools Sql Svg Network)
 
 set(CMAKE_AUTOUIC on)
 set(CMAKE_AUTOMOC on)
@@ -19,6 +19,8 @@ qt_add_executable(CodeCampusTerminal
     class/mainwindow.h
     class/databasemanager.h class/databasemanager.cpp
     class/databaseworker.h class/databaseworker.cpp
+    class/addproblem.h class/addproblem.cpp
+    class/previewkit.h class/previewkit.cpp
 )
 
 qt_add_translations(
@@ -31,6 +33,8 @@ target_link_libraries(CodeCampusTerminal
         Qt::Core
         Qt::Widgets
         Qt6::Sql
+        Qt6::Svg
+        Qt6::Network
 )
 
 install(TARGETS CodeCampusTerminal

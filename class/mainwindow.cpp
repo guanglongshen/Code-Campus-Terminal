@@ -1,5 +1,7 @@
 #include "mainwindow.h"
+#include "previewkit.h"
 #include <QMenu>
+#include <QVBoxLayout>
 #include <QStatusBar>
 
 MainWindow::MainWindow(QWidget *parent)
@@ -13,6 +15,10 @@ MainWindow::MainWindow(QWidget *parent)
 
     // 初始化菜单栏
     initMenuBar();
+
+    // TEST
+    PreviewKit *testing = new PreviewKit("请输入题目描述");
+    this->setCentralWidget(testing);
 }
 
 MainWindow::~MainWindow() = default;

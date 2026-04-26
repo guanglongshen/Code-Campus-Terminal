@@ -8,7 +8,7 @@
 #include <QThread>
 
 DatabaseWorker::DatabaseWorker(QObject *parent)
-    : QObject{parent} {}
+    : QObject(parent) {}
 
 void DatabaseWorker::onInitDatabase() {
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", "database_worker");
