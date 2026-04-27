@@ -2,14 +2,35 @@
 #include <QRegularExpression>
 #include <QNetworkReply>
 #include <QSplitter>
+#include <QGroupBox>
 
-PreviewKit::PreviewKit(const QString &placeholder, QWidget *parent)
+PreviewKit::PreviewKit(const QString &block_name, const QString &placeholder, QWidget *parent)
     : QWidget{parent} {
     // 网络管理器
     networkManager = new QNetworkAccessManager(this);
 
-    QVBoxLayout *layout = new QVBoxLayout(this);
-    layout->setContentsMargins(0, 0, 0, 0);
+
+    QGroupBox *groupbox = new QGroupBox(block_name);
+    groupbox->setStyleSheet(
+        "QGroupBox {"
+        "   border: 1px solid #A0A0A0;"     // 明显的灰色边框
+        "   border-radius: 0px;"            // 直角边框
+        "   margin-top: 1ex;"               // 为标题留出顶部空间
+        "   font-weight: bold;"             // 标题加粗
+        "}"
+        "QGroupBox::title {"
+        "   subcontrol-origin: margin;"
+        "   subcontrol-position: top left;" // 标题靠左上
+        "   left: 10px;"                    // 距离左边框 10px
+        "   color: #2C3E50;"                // 深色标题（深蓝灰色，更有质感）
+        "   padding: 0 5px;"                // 标题文字两侧的留白
+        "}"
+    );
+    QHBoxLayout *hlayout = new QHBoxLayout(this);
+    hlayout->addWidget(groupbox);
+
+    QVBoxLayout *layout = new QVBoxLayout(groupbox);
+    layout->setContentsMargins(0, 15, 0, 5);
 
     QSplitter *splitter = new QSplitter(Qt::Horizontal, this);
     layout->addWidget(splitter);
@@ -29,7 +50,6 @@ PreviewKit::PreviewKit(const QString &placeholder, QWidget *parent)
     splitter->setStretchFactor(0, 1);
     splitter->setStretchFactor(1, 1);
 
-    this->setLayout(layout);
 
     // 初始化计时器，单次触发
     renderTimer = new QTimer(this);
@@ -43,13 +63,12 @@ PreviewKit::PreviewKit(const QString &placeholder, QWidget *parent)
 }
 
 QString PreviewKit::getText() const {
-    qDebug() << contentEdit->toPlainText();
     return contentEdit->toPlainText();
 }
 
 void PreviewKit::update() {
     QString content = contentEdit->toPlainText();
-    if (content.isEmpty()) content = "<i> ... 预览区域 ...<i>";
+    if (content.isEmpty()) content = "<i>... 预览区域 ...<i>";
 
     // 辅助 lambda：处理公式并生成虚拟资源路径
     auto processFormula = [this, &content](const QString& regexStr, bool isBlock) {
@@ -68,7 +87,7 @@ void PreviewKit::update() {
 
             // 如果缓存里还没有这张图，则发起下载
             if (previewView->document()->resource(QTextDocument::ImageResource, virtualUrl).isNull()) {
-                QUrl fetchUrl("http://latex.codecogs.com/svg.image?" + QUrl::toPercentEncoding(formula));
+                QUrl fetchUrl("http://tex.xumin.net/svg/" + QUrl::toPercentEncoding(formula));
                 QNetworkReply* reply = networkManager->get(QNetworkRequest(fetchUrl));
 
                 connect(reply, &QNetworkReply::finished, [this, reply, virtualUrl]() {
@@ -86,7 +105,7 @@ void PreviewKit::update() {
             // 构造 HTML 标签
             QString imgTag;
             if (isBlock) {
-                imgTag = QString("<div align='center'><img src='%1'></div>").arg(resName);
+                imgTag = QString("<div align='center'><img src='%1' style='height: 1.1em'></div>").arg(resName);
             } else {
                 imgTag = QString("<img src='%1' style='vertical-align: middle;'>").arg(resName);
             }

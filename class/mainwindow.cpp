@@ -17,8 +17,11 @@ MainWindow::MainWindow(QWidget *parent)
     initMenuBar();
 
     // TEST
-    PreviewKit *testing = new PreviewKit("请输入题目描述");
-    this->setCentralWidget(testing);
+    QWidget *container = new QWidget(this);
+    QHBoxLayout *vlayout = new QHBoxLayout(container);
+    PreviewKit *testing = new PreviewKit("题目描述", "请输入题目描述", this);
+    vlayout->addWidget(testing);
+    this->setCentralWidget(container);
 }
 
 MainWindow::~MainWindow() = default;

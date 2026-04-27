@@ -12,7 +12,7 @@
 class PreviewKit : public QWidget {
     Q_OBJECT
 public:
-    explicit PreviewKit(const QString &placeholder = "", QWidget *parent = nullptr);
+    explicit PreviewKit(const QString &block_name, const QString &placeholder = "", QWidget *parent = nullptr);
     QString getText() const;
     void setText(const QString &t);
 
