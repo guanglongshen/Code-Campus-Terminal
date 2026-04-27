@@ -128,5 +128,5 @@ void PreviewKit::update() {
     )").arg(content);
 
     previewView->setHtml(finalHtml);
-    this->getText();
+    // this->getText();
 }

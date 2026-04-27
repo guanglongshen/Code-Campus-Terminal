@@ -1,3 +1,4 @@
+#include "addproblem.h"
 #include "mainwindow.h"
 #include "previewkit.h"
 #include <QMenu>
@@ -39,6 +40,13 @@ void MainWindow::initMenuBar() {
     QAction *checkLibrary = problemsetMenu->addAction(tr("查看题库"));
     problemsetMenu->addSeparator();
     QAction *addProblem = problemsetMenu->addAction(tr("添加题目"));
+    connect(addProblem, &QAction::triggered, [this](){
+        AddProblem *ask = new AddProblem(this);
+
+        ask->setAttribute(Qt::WA_DeleteOnClose);
+
+        ask->show();
+    });
     QAction *delteProblem = problemsetMenu->addAction(tr("删除题目"));
     QAction *modifyProblem = problemsetMenu->addAction(tr("修改题目"));
 }

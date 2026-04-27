@@ -3,15 +3,16 @@
 
 #include "previewkit.h"
 #include <QDialog>
+#include <QLineEdit>
 
 
 class AddProblem : public QDialog {
     Q_OBJECT
 public:
-    AddProblem(QWidget *parent);
+    explicit AddProblem(QWidget *parent = nullptr);
 
 private:
-    QTextLine *problem_name;
+    TitleKit *problem_name;
     PreviewKit *problem_describe;
     PreviewKit *input_format;
     PreviewKit *output_format;

@@ -21,6 +21,7 @@ qt_add_executable(CodeCampusTerminal
     class/databaseworker.h class/databaseworker.cpp
     class/addproblem.h class/addproblem.cpp
     class/previewkit.h class/previewkit.cpp
+    class/sampleskit.h class/sampleskit.cpp
 )
 
 qt_add_translations(
