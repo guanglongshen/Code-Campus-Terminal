@@ -11,26 +11,12 @@ PreviewKit::PreviewKit(const QString &block_name, const QString &placeholder, QW
 
 
     QGroupBox *groupbox = new QGroupBox(block_name);
-    groupbox->setStyleSheet(
-        "QGroupBox {"
-        "   border: 1px solid #A0A0A0;"     // 明显的灰色边框
-        "   border-radius: 0px;"            // 直角边框
-        "   margin-top: 1ex;"               // 为标题留出顶部空间
-        "   font-weight: bold;"             // 标题加粗
-        "}"
-        "QGroupBox::title {"
-        "   subcontrol-origin: margin;"
-        "   subcontrol-position: top left;" // 标题靠左上
-        "   left: 10px;"                    // 距离左边框 10px
-        "   color: #2C3E50;"                // 深色标题（深蓝灰色，更有质感）
-        "   padding: 0 5px;"                // 标题文字两侧的留白
-        "}"
-    );
+
     QHBoxLayout *hlayout = new QHBoxLayout(this);
     hlayout->addWidget(groupbox);
 
     QVBoxLayout *layout = new QVBoxLayout(groupbox);
-    layout->setContentsMargins(0, 15, 0, 5);
+    layout->setContentsMargins(15, 15, 15, 15);
 
     QSplitter *splitter = new QSplitter(Qt::Horizontal, this);
     layout->addWidget(splitter);
@@ -68,7 +54,7 @@ QString PreviewKit::getText() const {
 
 void PreviewKit::update() {
     QString content = contentEdit->toPlainText();
-    if (content.isEmpty()) content = "<i>... 预览区域 ...<i>";
+    if (content.isEmpty()) content = "... 预览区域 ...";
 
     // 辅助 lambda：处理公式并生成虚拟资源路径
     auto processFormula = [this, &content](const QString& regexStr, bool isBlock) {

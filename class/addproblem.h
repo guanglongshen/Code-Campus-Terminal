@@ -2,6 +2,7 @@
 #define ADDPROBLEM_H
 
 #include "previewkit.h"
+#include "sampleskit.h"
 #include <QDialog>
 #include <QLineEdit>
 
@@ -16,7 +17,7 @@ private:
     PreviewKit *problem_describe;
     PreviewKit *input_format;
     PreviewKit *output_format;
-
+    SamplesKit *samples;
     PreviewKit *hint;
 };
 
