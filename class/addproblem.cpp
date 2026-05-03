@@ -1,8 +1,10 @@
+#include "ProblemData.h"
 #include "addproblem.h"
 #include "previewkit.h"
 #include <QGroupBox>
 #include <QScrollArea>
 #include <QSplitter>
+#include <QToolTip>
 
 AddProblem::AddProblem(QWidget *parent) : QDialog(parent) {
     this->setWindowTitle(tr("编辑题目"));
@@ -30,12 +32,14 @@ AddProblem::AddProblem(QWidget *parent) : QDialog(parent) {
 
         // 4. 针对性修饰
         "QPushButton#deleteBtn { font-weight: bold; font-size: 16px; }"
+        "QPushButton#cancelBtn:hover { color: #EE7C6B; }"
+        "QPushButton#cancelBtn:pressed { color: #E54646; }"
         "QPlainTextEdit { border: 1px solid #CCC; background: white; }"
         "QLineEdit { border: 1px solid #CCC; background: white; }"
     );
 
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
-    SmoothScrollArea *vScrollArea = new SmoothScrollArea(this);
+    vScrollArea = new SmoothScrollArea(this);
     vScrollArea->setWidgetResizable(true);
     vScrollArea->setFrameShape(QFrame::NoFrame);
 
@@ -63,6 +67,45 @@ AddProblem::AddProblem(QWidget *parent) : QDialog(parent) {
     scrollContent->addWidget(output_format);
     scrollContent->addWidget(samples);
     scrollContent->addWidget(hint);
+
+    QWidget *btnContainer = new QWidget;
+    QHBoxLayout *btnLayout = new QHBoxLayout(btnContainer);
+    btnLayout->setAlignment(Qt::AlignRight);
+    save = new QPushButton(tr("保存"));
+    connect(save, &QPushButton::clicked, [this](){
+        if (problem_name->getText().trimmed().isEmpty()) {
+            vScrollArea->ensureWidgetVisible(problem_name);
+            problem_name->setFocus();
+            problem_name->setStyleSheet("color: red; font-weight: bold;");
+            problem_name->setText("");
+
+            QTimer::singleShot(3000, this, [=]() {
+                problem_name->setStyleSheet(""); // 清除样式表，恢复原始颜色
+            });
+
+            QPoint pos = problem_name->mapToGlobal(QPoint(15, problem_name->getTextPosition()));
+            QToolTip::showText(pos, tr("题目名称不能为空"), problem_name);
+            return ;
+        }
+        PROBLEM_DESCRIBE data;
+        data.title = problem_name->getText();
+        data.content = problem_describe->getText();
+        data.inputF = input_format->getText();
+        data.outputF = output_format->getText();
+        data.samples = samples->getSamples();
+        data.hint = hint->getText();
+        data.samplesCount = samples->getSamplesCount();
+
+        emit problemSubmitted(data);
+        this->close();
+    });
+
+    cancel = new QPushButton(tr("取消"));
+    cancel->setObjectName("cancelBtn");
+    connect(cancel, &QPushButton::clicked, this, &QDialog::reject);
+    btnLayout->addWidget(save);
+    btnLayout->addWidget(cancel);
+    scrollContent->addWidget(btnContainer);
 
     scrollContent->setStretchFactor(0, 0); // 题目名称固定大小
     scrollContent->setStretchFactor(1, 1);

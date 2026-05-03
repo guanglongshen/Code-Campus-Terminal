@@ -21,8 +21,14 @@ DatabaseManager::DatabaseManager() {
 
     // 信号相关联
     connect(worker, &DatabaseWorker::dbInitialized, this, &DatabaseManager::databaseReady);
+    connect(worker, &DatabaseWorker::operateInformation, this, &DatabaseManager::response);
     connect(managerThread, &QThread::started, worker, &DatabaseWorker::onInitDatabase);
     connect(managerThread, &QThread::finished, worker, &QObject::deleteLater);
+
+    // 自信号
+    // 存入题目
+    connect(this, &DatabaseManager::requestAddProblem, worker, &DatabaseWorker::onAddProblem);
+
 
     managerThread->start();
 }

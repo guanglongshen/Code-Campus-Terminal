@@ -30,6 +30,7 @@ public:
         groups->setAlignment(Qt::AlignLeft);
         groups->addWidget(id);
         deleteButton = new QPushButton("x");
+        deleteButton->setObjectName("deleteBtn");
 
         connect(deleteButton, &QPushButton::clicked, [this](){
             emit requestDelete(this);
@@ -48,6 +49,18 @@ public:
         id->setText(text);
     }
 
+    bool isAllEmpty() {
+        return input->toPlainText().isEmpty() && output->toPlainText().isEmpty();
+    }
+
+    QString getInput() {
+        return input->toPlainText();
+    }
+
+    QString getOutput() {
+        return output->toPlainText();
+    }
+
 private:
     QLabel *id;
     QPlainTextEdit *input;
@@ -59,6 +72,8 @@ class SamplesKit : public QWidget {
     Q_OBJECT
 public:
     explicit SamplesKit(const QString &block_name, QWidget *parent = nullptr);
+    QString getSamples();
+    int getSamplesCount();
 
 signals:
 
@@ -66,6 +81,7 @@ private:
     QPushButton *addSamplesButton;
     QSplitter *splitter;    // 管理多个 Samples
     int sampleCount = 0;    // 样例 ID
+    int realCount = 0;      // 实际存储样例
 
     void updateOrders();
 public slots:

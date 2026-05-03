@@ -29,9 +29,15 @@ public:
         layout->addWidget(problem_names);
     }
     QString getText() const {
-        return problem_names->text();
+        return problem_names->text().trimmed();
     }
-    void setText(const QString &t);
+    void setText(const QString &t){
+        problem_names->setText(t);
+    }
+
+    int getTextPosition() {
+        return problem_names->height();
+    }
 
 signals:
 

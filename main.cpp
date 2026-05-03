@@ -1,3 +1,4 @@
+#include "class/ProblemData.h"
 #include "class/mainwindow.h"
 
 #include <QApplication>
@@ -8,6 +9,7 @@
 
 int main(int argc, char *argv[]) {
     QApplication a(argc, argv);
+    qRegisterMetaType<PROBLEM_DESCRIBE>("PROBLEM_DESCRIBE");
 
     // 设置本地基础信息以及配置信息
     QCoreApplication::setOrganizationName("Code Campus Terminal");
@@ -26,6 +28,6 @@ int main(int argc, char *argv[]) {
         }
     }
     MainWindow w;
-    w.show();
+    w.showMaximized();
     return QCoreApplication::exec();
 }

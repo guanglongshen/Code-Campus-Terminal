@@ -13,16 +13,15 @@ MainWindow::MainWindow(QWidget *parent)
     connect(DatabaseManager::instance(), &DatabaseManager::databaseReady, this, [this](const QString &msg){
         this->statusBar()->showMessage(msg, 3000);
     });
+    connect(DatabaseManager::instance(), &DatabaseManager::response, [this](const QString &msg){
+        this->statusBar()->showMessage(msg, 3000);
+    });
 
     // 初始化菜单栏
     initMenuBar();
 
     // TEST
-    QWidget *container = new QWidget(this);
-    QHBoxLayout *vlayout = new QHBoxLayout(container);
-    PreviewKit *testing = new PreviewKit("题目描述", "请输入题目描述", this);
-    vlayout->addWidget(testing);
-    this->setCentralWidget(container);
+
 }
 
 MainWindow::~MainWindow() = default;
@@ -45,6 +44,8 @@ void MainWindow::initMenuBar() {
 
         ask->setAttribute(Qt::WA_DeleteOnClose);
 
+        // 连接信号
+        connect(ask, &AddProblem::problemSubmitted, DatabaseManager::instance(), &DatabaseManager::requestAddProblem);
         ask->show();
     });
     QAction *delteProblem = problemsetMenu->addAction(tr("删除题目"));

@@ -23,6 +23,7 @@ qt_add_executable(CodeCampusTerminal
     class/previewkit.h class/previewkit.cpp
     class/sampleskit.h class/sampleskit.cpp
     class/smoothscrollarea.h class/smoothscrollarea.cpp
+    class/ProblemData.h
 )
 
 qt_add_translations(

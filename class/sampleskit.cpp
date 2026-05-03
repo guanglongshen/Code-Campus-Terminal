@@ -5,6 +5,8 @@
 #include <QScroller>
 #include <QScrollArea>
 #include <QScrollBar>
+#include <QJsonArray>
+#include <QJsonObject>
 
 SamplesKit::SamplesKit(const QString &block_name, QWidget *parent)
     : QWidget{parent} {
@@ -51,6 +53,28 @@ SamplesKit::SamplesKit(const QString &block_name, QWidget *parent)
 
     layout->addWidget(scrollArea);
     layout->addLayout(addHbox);
+}
+
+QString SamplesKit::getSamples() {
+    QJsonArray samplesArray;
+    for (int i = 0; i < splitter->count(); i++) {
+        // 类型转换
+        Samples *query = qobject_cast<Samples*>(splitter->widget(i));
+        if (query->isAllEmpty()) continue;
+
+        QJsonObject sampleObj;
+        sampleObj.insert("input", query->getInput());
+        sampleObj.insert("output", query->getOutput());
+
+        samplesArray.append(sampleObj);
+    }
+    realCount = samplesArray.count();
+
+    return QJsonDocument(samplesArray).toJson(QJsonDocument::Compact);
+}
+
+int SamplesKit::getSamplesCount() {
+    return realCount;
 }
 
 void SamplesKit::updateOrders() {

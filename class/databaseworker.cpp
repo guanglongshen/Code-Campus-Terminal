@@ -47,8 +47,37 @@ void DatabaseWorker::onInitDatabase() {
             emit dbInitialized(tr("数据库初始化成功！线程: %1 | 题库表已创建!").arg(threadAddress));
         }
     } else {
-        QString error = "数据库初始化失败！" + db.lastError().text();
-        emit dbInitialized(tr("%1").arg(error));
+        QString error = tr("数据库初始化失败！") + db.lastError().text();
+        emit dbInitialized(error);
+        return ;
+    }
+}
+
+void DatabaseWorker::onAddProblem(const PROBLEM_DESCRIBE &data) {
+    QSqlDatabase db = QSqlDatabase::database("database_worker");
+
+    if (!db.isOpen()) {
+        emit dbInitialized("插入失败，数据库未打开！");
+        return ;
+    }
+
+    QSqlQuery query(db);
+    query.prepare("INSERT INTO problems (title, content, input_format, output_format, hint, samples) "
+                  "VALUES (:title, :content, :input_format, :output_format, :hint, :samples)");
+
+    query.bindValue(":title", data.title);
+    query.bindValue(":content", data.content);
+    query.bindValue(":input_format", data.inputF);
+    query.bindValue(":output_format", data.outputF);
+    query.bindValue(":hint", data.hint);
+    query.bindValue(":samples", data.samples);
+
+    if (query.exec()) {
+        QString ok = tr("题目存储成功！") + tr("题目名: ") + QString("%1").arg(data.title) + tr("，共计样例组: ") + QString("%1").arg(data.samplesCount);
+        emit operateInformation(ok);
+    } else {
+        QString no = tr("题目存储失败！") + query.lastError().text();
+        emit operateInformation(no);
         return ;
     }
 }
