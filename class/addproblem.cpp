@@ -36,6 +36,9 @@ AddProblem::AddProblem(QWidget *parent) : QDialog(parent) {
         "QPushButton#cancelBtn:pressed { color: #E54646; }"
         "QPlainTextEdit { border: 1px solid #CCC; background: white; }"
         "QLineEdit { border: 1px solid #CCC; background: white; }"
+        "QLineEdit#time_limit_edit, QLineEdit#space_limit_edit { border: none; border-bottom: 1px solid #CCCCCC; background-color: transparent; }"
+        "QLineEdit#time_limit_edit:focus, QLineEdit#space_limit_edit:focus { border-bottom: 2px solid #0078D4; }"
+
     );
 
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
