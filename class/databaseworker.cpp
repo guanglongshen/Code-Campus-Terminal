@@ -62,10 +62,12 @@ void DatabaseWorker::onAddProblem(const PROBLEM_DESCRIBE &data) {
     }
 
     QSqlQuery query(db);
-    query.prepare("INSERT INTO problems (title, content, input_format, output_format, hint, samples) "
-                  "VALUES (:title, :content, :input_format, :output_format, :hint, :samples)");
+    query.prepare("INSERT INTO problems (title, time_limit, memory_limit, content, input_format, output_format, hint, samples) "
+                  "VALUES (:title, :time_limit, :memory_limit, :content, :input_format, :output_format, :hint, :samples)");
 
     query.bindValue(":title", data.title);
+    query.bindValue(":time_limit", data.timeLimit);
+    query.bindValue(":memory_limit", data.spaceLimit);
     query.bindValue(":content", data.content);
     query.bindValue(":input_format", data.inputF);
     query.bindValue(":output_format", data.outputF);

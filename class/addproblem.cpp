@@ -98,6 +98,8 @@ AddProblem::AddProblem(QWidget *parent) : QDialog(parent) {
         data.samples = samples->getSamples();
         data.hint = hint->getText();
         data.samplesCount = samples->getSamplesCount();
+        data.timeLimit = problem_name->getTimeLimit();
+        data.spaceLimit = problem_name->getSpaceLimit();
 
         emit problemSubmitted(data);
         this->close();

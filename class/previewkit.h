@@ -46,6 +46,7 @@ public:
         limitLayout->addWidget(title_time);
         limitLayout->addWidget(time_limit);
         limitLayout->addSpacing(20);
+        TIMES = 1000;
         connect(time_limit, &QLineEdit::editingFinished, this, [=](){
             int val = time_limit->text().toInt();
             if (val < 50) {
@@ -53,6 +54,8 @@ public:
             } else if (val > 10000) {
                 time_limit->setText("10000");
             }
+
+            TIMES = time_limit->text().toInt();
         });
 
         QLabel *title_space = new QLabel(tr("空间限制(MB):"));
@@ -65,6 +68,7 @@ public:
         space_limit->setFixedWidth(widthForEdit);
         validator_space = new QIntValidator(0, 9999, this);
         space_limit->setValidator(validator_space);
+        SPACES = 512;
         connect(space_limit, &QLineEdit::editingFinished, this, [=](){
             int val = space_limit->text().toInt();
             if (val < 8) {
@@ -72,6 +76,8 @@ public:
             } else if (val > 1024) {
                 space_limit->setText("1024");
             }
+
+            SPACES = space_limit->text().toInt();
         });
 
         limitLayout->addWidget(title_space);
@@ -90,12 +96,23 @@ public:
         return problem_names->height();
     }
 
+    // 获取时间限制值
+    int getTimeLimit() {
+        return TIMES;
+    }
+
+    // 获取空间限制值
+    int getSpaceLimit() {
+        return SPACES;
+    }
+
 signals:
 
 private:
     QLineEdit *problem_names;
     QLineEdit *time_limit, *space_limit;
     QIntValidator *validator_time, *validator_space;
+    int TIMES, SPACES;
 };
 
 class PreviewKit : public QWidget {

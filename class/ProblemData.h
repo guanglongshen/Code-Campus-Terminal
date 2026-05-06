@@ -7,7 +7,7 @@
 
 struct PROBLEM_DESCRIBE {
     QString title, content, inputF, outputF, samples, hint;
-    int samplesCount;
+    int samplesCount, timeLimit, spaceLimit;
 };
 
 Q_DECLARE_METATYPE(PROBLEM_DESCRIBE)
